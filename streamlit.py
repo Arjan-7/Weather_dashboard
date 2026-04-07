@@ -52,4 +52,27 @@ if st.button("Get Weather"):
         with st.expander("Raw data"):
             st.json(weather)
         with st.expander("Dataframe"):
-            st.dataframe(df)
+            st.dataframe(data)
+
+forecast_data = data['list']
+daily_forecast = []
+for i in range(0, len(forecast_data),8):
+    day = forecast_data[i]
+    temp = day['main']['temp']
+    date = day['dt_txt']
+    daily_forecast.append((date, temp))
+
+st.subheader("5-Day forecast")
+for date, temp in daily_forecast[:5]:
+    st.write(f"{date} -> {temp}°C")
+
+import matplotlib.pyplot as plt
+dates = [d[0] for d in
+daily_forecast[:5]]
+temps = [d[1] for d in daily_forecast[:5]]
+plt.plot(dates, temps, marker='o')
+plt.xticks(rotation=45)
+plt.title("Temperature Forecast") 
+plt.xlabel("Date")
+plt.ylabel("Temp(°C)")
+st.pyplot(plt)  
